@@ -64,20 +64,24 @@ there's no settings-form UI wired up for plugin schemas yet — despite the
 manifest declaring one — so this means hand-editing your bar entry in
 `~/.config/omarchy/shell.json` (which the shell watches live, so no restart
 needed). Find the `{"id": "loudestnoise.nightscout-cgm"}` entry under
-`bar.layout` and add a `settings` object next to it:
+`bar.layout` and add your settings as **flat keys directly on that entry**
+(not nested under a `"settings"` key — the shell copies every non-`"id"`
+key on the entry straight into the widget's settings object, the same way
+`omarchy.clock`'s entry has `format`/`formatAlt` as plain top-level keys):
 
 ```json
 {
   "id": "loudestnoise.nightscout-cgm",
-  "settings": {
-    "nightscoutUrl": "https://your-nightscout-instance.com"
-  }
+  "nightscoutUrl": "https://your-nightscout-instance.com"
 }
 ```
 
 You can add `lowMmol`, `highMmol`, `urgentHighMmol`, `showMgdl`, and
-`refreshIntervalSec` the same way to override their defaults (4.0, 8.0,
-15.0, false, 60). The bar pill shows a loading/warning glyph until a URL is
+`refreshIntervalSec` the same way (as more flat keys on the entry) to
+override their defaults (4.0, 8.0, 15.0, false, 60). Settings changes apply
+on the widget's next poll (default: within 60s); to see it immediately,
+middle-click the pill or open its popup and click Refresh. The bar pill
+shows a loading/warning glyph until a URL is
 set.
 
 ## JSON contract
