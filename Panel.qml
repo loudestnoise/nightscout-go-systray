@@ -39,6 +39,7 @@ Panel {
     readonly property real lowMmol: Number(setting("lowMmol", 4.0))
     readonly property real highMmol: Number(setting("highMmol", 8.0))
     readonly property real urgentHighMmol: Number(setting("urgentHighMmol", 15.0))
+    readonly property bool showMgdl: setting("showMgdl", false) === true
     readonly property int refreshIntervalSec: {
         var n = parseInt(String(setting("refreshIntervalSec", 60)), 10);
         if (!isFinite(n)) n = 60;
@@ -47,8 +48,8 @@ Panel {
 
     property var data: null
 
-    readonly property string pillText: M.pillText(root.data)
-    readonly property string pillTooltip: M.pillTooltip(root.data)
+    readonly property string pillText: M.pillText(root.data, root.showMgdl)
+    readonly property string pillTooltip: M.pillTooltip(root.data, root.showMgdl)
 
     // Every "current reading" binding below must gate on these instead of
     // plain `root.data` truthiness: QML evaluates a bound expression eagerly
@@ -201,7 +202,8 @@ Panel {
 
                     Text {
                         text: root.hasReading
-                            ? root.data.mmol.toFixed(1) + " mmol/L (" + root.data.mgdl + " mg/dL) " + root.data.directionArrow
+                            ? M.primaryValue(root.data, root.showMgdl) + " " + M.primaryUnit(root.showMgdl) +
+                              " (" + M.secondaryValueText(root.data, root.showMgdl) + ") " + root.data.directionArrow
                             : ""
                         color: root.fg
                         font.family: root.fontFamily
@@ -216,7 +218,7 @@ Panel {
                     }
                     Text {
                         visible: root.hasPrevious
-                        text: root.hasPrevious ? "Previous: " + root.data.previousMmol.toFixed(1) + " mmol/L" : ""
+                        text: root.hasPrevious ? "Previous: " + M.previousValueText(root.data, root.showMgdl) : ""
                         color: root.muted
                         font.family: root.fontFamily
                         font.pixelSize: Style.font.caption

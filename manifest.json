@@ -22,6 +22,7 @@
       "lowMmol": 4.0,
       "highMmol": 8.0,
       "urgentHighMmol": 15.0,
+      "showMgdl": false,
       "refreshIntervalSec": 60
     },
     "schema": [
@@ -30,6 +31,13 @@
         "type": "string",
         "label": "Nightscout URL",
         "defaultValue": ""
+      },
+      {
+        "key": "showMgdl",
+        "type": "boolean",
+        "label": "Show as mg/dL",
+        "defaultValue": false,
+        "description": "Display mg/dL as the primary value instead of mmol/L (both are always shown in the popup)."
       },
       {
         "key": "lowMmol",

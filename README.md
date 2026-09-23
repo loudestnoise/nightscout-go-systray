@@ -61,8 +61,9 @@ Requires Go 1.16+ (`go version` to check; install via your distro or
 
 Finally, open the plugin's settings from Omarchy's Setup > Plugins screen
 and set your Nightscout URL (required), low/high/urgent-high targets in
-mmol/L, and refresh interval. The bar pill shows a loading/warning glyph
-until a URL is set.
+mmol/L, whether to show mg/dL instead of mmol/L as the primary value (both
+are always shown in the popup), and refresh interval. The bar pill shows a
+loading/warning glyph until a URL is set.
 
 ## JSON contract
 
@@ -84,9 +85,6 @@ Example:
 
 ## Known limitations / follow-ups
 
-- No mg/dL display toggle (original had one, persisted via BoltDB); this
-  fork always shows mmol/L in the pill. Easy to add back as a plugin
-  setting if wanted.
 - No desktop notifications for alerts yet (original used `beeep`); the
   popup lists active alerts, but nothing pushes a notification when the bar
   isn't visible.
