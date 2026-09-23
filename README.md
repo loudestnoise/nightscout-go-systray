@@ -102,14 +102,27 @@ Example:
 }
 ```
 
+## Updating the plugin
+
+After `omarchy plugin update` (or manually editing files under the plugin's
+install directory), run **`omarchy restart shell`**. On Omarchy
+4.0.0-alpha, the "Local plugin changed, reloading" file-watch that fires on
+edits does not reliably recreate a `bar-widget` that's already placed in
+the bar — it can keep running the pre-update code (and miss the update
+entirely) until the shell itself is restarted. This does *not* apply to
+settings changes in `shell.json`: those reach an already-running widget
+live, no restart needed.
+
 ## Known limitations / follow-ups
 
 - No desktop notifications for alerts yet (original used `beeep`); the
   popup lists active alerts, but nothing pushes a notification when the bar
   isn't visible.
-- QML was written against and tested against Omarchy 4.0.0 (alpha,
-  "Quattro") via `qs -p <path>` headless runs against real Nightscout-shaped
-  JSON; it has not been exercised in a live desktop session.
+- Verified on a real Omarchy 4.0.0-alpha ("Quattro") desktop install: built
+  and enabled the plugin, drove it through its actual `Bar.qml` ->
+  `BarWidget.qml` -> `Panel.qml` settings-injection path (not just headless
+  `qs -p` runs against synthetic harnesses), and confirmed a live glucose
+  reading rendering in the real bar and popup.
 
 ## Attribution
 
