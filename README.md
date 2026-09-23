@@ -130,11 +130,12 @@ live, no restart needed.
 - Fork this repo is based on: [harmen91/nightscout-go-systray](https://github.com/harmen91/nightscout-go-systray)
 - Omarchy plugin work in this fork: [loudestnoise](https://github.com/loudestnoise), with implementation assistance from [Claude Code](https://claude.com/claude-code)
 
-Neither upstream repo declares a license. This fork doesn't add one either
-— rather than assert rights the fork doesn't clearly have, it's published
-as-is for personal Omarchy use, tracking the same no-stated-license status
-as its upstream. If you're the original author and want a license added or
-want this handled differently, please open an issue.
+Neither upstream repo declares a license. This fork is [MIT licensed](./LICENSE)
+as of the Omarchy plugin work — needed for marketplace listing, which
+requires a license file — but that covers this fork's own state, not a
+claim of original authorship over the parts descended from brettcodling's
+and harmen91's unlicensed work. If you're the original author and want this
+handled differently, please open an issue.
 
 ## Original screenshots (standalone tray app, for history)
 

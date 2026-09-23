@@ -4,6 +4,7 @@
   "name": "Nightscout CGM",
   "version": "0.1.0",
   "author": "loudestnoise",
+  "license": "MIT",
   "repository": "https://github.com/loudestnoise/nightscout-go-systray",
   "description": "Live Nightscout CGM glucose readings in the Omarchy bar: current value, trend arrow, range coloring, and a detail popup with previous reading and low/in-range predictions.",
   "kinds": ["bar-widget"],
