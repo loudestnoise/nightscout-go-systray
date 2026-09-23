@@ -80,6 +80,15 @@ Panel {
         fetchProc.running = true;
     }
 
+    // BarWidget's injectPanel() can hand us the real `settings` object
+    // slightly after this Panel's own Timer{triggeredOnStart:true} has
+    // already fired refresh() once with the not-yet-injected default ({}) --
+    // both happen "as soon as possible after load" and their relative order
+    // isn't guaranteed. Without this, that first refresh() latches the "no
+    // URL" error into root.data and nothing retries it until the next full
+    // refreshIntervalSec tick, even though a URL was configured all along.
+    onNightscoutUrlChanged: root.refresh()
+
     function ingest(text) {
         try {
             root.data = JSON.parse(text);
