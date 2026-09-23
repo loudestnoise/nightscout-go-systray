@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "loudestnoise.nightscout-cgm",
+  "name": "Nightscout CGM",
+  "version": "0.1.0",
+  "author": "loudestnoise",
+  "repository": "https://github.com/loudestnoise/nightscout-go-systray",
+  "description": "Live Nightscout CGM glucose readings in the Omarchy bar: current value, trend arrow, range coloring, and a detail popup with previous reading and low/in-range predictions.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Nightscout CGM",
+    "description": "Live glucose reading with trend and range coloring",
+    "category": "Health",
+    "aliases": ["nightscout", "cgm", "glucose", "blood sugar"],
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "nightscoutUrl": "",
+      "lowMmol": 4.0,
+      "highMmol": 8.0,
+      "urgentHighMmol": 15.0,
+      "showMgdl": false,
+      "refreshIntervalSec": 60
+    },
+    "schema": [
+      {
+        "key": "nightscoutUrl",
+        "type": "string",
+        "label": "Nightscout URL",
+        "defaultValue": ""
+      },
+      {
+        "key": "showMgdl",
+        "type": "boolean",
+        "label": "Show as mg/dL",
+        "defaultValue": false,
+        "description": "Display mg/dL as the primary value instead of mmol/L (both are always shown in the popup)."
+      },
+      {
+        "key": "lowMmol",
+        "type": "number",
+        "label": "Low target (mmol/L)",
+        "min": 1,
+        "max": 10,
+        "step": 0.1,
+        "defaultValue": 4.0
+      },
+      {
+        "key": "highMmol",
+        "type": "number",
+        "label": "High target (mmol/L)",
+        "min": 5,
+        "max": 20,
+        "step": 0.1,
+        "defaultValue": 8.0
+      },
+      {
+        "key": "urgentHighMmol",
+        "type": "number",
+        "label": "Urgent high (mmol/L)",
+        "min": 8,
+        "max": 30,
+        "step": 0.1,
+        "defaultValue": 15.0
+      },
+      {
+        "key": "refreshIntervalSec",
+        "type": "integer",
+        "label": "Refresh interval (seconds)",
+        "min": 15,
+        "max": 600,
+        "step": 15,
+        "defaultValue": 60
+      }
+    ]
+  }
+}
