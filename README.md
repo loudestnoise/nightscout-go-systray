@@ -59,11 +59,26 @@ go build -o bin/cgm .
 Requires Go 1.16+ (`go version` to check; install via your distro or
 `mise use go` if you use [mise](https://mise.jdx.dev/)).
 
-Finally, open the plugin's settings from Omarchy's Setup > Plugins screen
-and set your Nightscout URL (required), low/high/urgent-high targets in
-mmol/L, whether to show mg/dL instead of mmol/L as the primary value (both
-are always shown in the popup), and refresh interval. The bar pill shows a
-loading/warning glyph until a URL is set.
+Finally, set your Nightscout URL (required). As of Omarchy 4.0.0-alpha
+there's no settings-form UI wired up for plugin schemas yet — despite the
+manifest declaring one — so this means hand-editing your bar entry in
+`~/.config/omarchy/shell.json` (which the shell watches live, so no restart
+needed). Find the `{"id": "loudestnoise.nightscout-cgm"}` entry under
+`bar.layout` and add a `settings` object next to it:
+
+```json
+{
+  "id": "loudestnoise.nightscout-cgm",
+  "settings": {
+    "nightscoutUrl": "https://your-nightscout-instance.com"
+  }
+}
+```
+
+You can add `lowMmol`, `highMmol`, `urgentHighMmol`, `showMgdl`, and
+`refreshIntervalSec` the same way to override their defaults (4.0, 8.0,
+15.0, false, 60). The bar pill shows a loading/warning glyph until a URL is
+set.
 
 ## JSON contract
 
