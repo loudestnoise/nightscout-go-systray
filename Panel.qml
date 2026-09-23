@@ -76,7 +76,7 @@ Panel {
             return;
         }
         if (fetchProc.running) return;
-        fetchProc.command = M.cliArgs(root.cli, root.settings);
+        fetchProc.command = M.cliArgs(root.cli, root.nightscoutUrl, root.lowMmol, root.highMmol, root.urgentHighMmol);
         fetchProc.running = true;
     }
 
