@@ -19,7 +19,15 @@ Panel {
     property var hostWidget: null
     readonly property var barIdentity: hostWidget || root
 
-    property var settings: ({})
+    // `settings` is NOT redeclared here -- it's already on the base `Panel`
+    // type (qs.Ui/Panel.qml). Redeclaring it shadowed the inherited one:
+    // BarWidget.qml's injectPanel() assigns to `p.settings` from outside,
+    // and that external assignment was landing on a different property slot
+    // than the one this file's own bindings (nightscoutUrl, etc.) read from,
+    // so settings from shell.json never actually reached them. Confirmed
+    // live: the widget stayed stuck on "Set a Nightscout URL" even after a
+    // full IPC-forced shell.reloadConfig(), which ruled out a stale file
+    // watch and pointed here instead.
 
     readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
     readonly property color fg: Color.popups.text
@@ -76,9 +84,18 @@ Panel {
             return;
         }
         if (fetchProc.running) return;
-        fetchProc.command = M.cliArgs(root.cli, root.settings);
+        fetchProc.command = M.cliArgs(root.cli, root.nightscoutUrl, root.lowMmol, root.highMmol, root.urgentHighMmol);
         fetchProc.running = true;
     }
+
+    // BarWidget's injectPanel() can hand us the real `settings` object
+    // slightly after this Panel's own Timer{triggeredOnStart:true} has
+    // already fired refresh() once with the not-yet-injected default ({}) --
+    // both happen "as soon as possible after load" and their relative order
+    // isn't guaranteed. Without this, that first refresh() latches the "no
+    // URL" error into root.data and nothing retries it until the next full
+    // refreshIntervalSec tick, even though a URL was configured all along.
+    onNightscoutUrlChanged: root.refresh()
 
     function ingest(text) {
         try {

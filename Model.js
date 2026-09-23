@@ -69,13 +69,16 @@ function formatClock(ms) {
     return hh + ":" + mm;
 }
 
-// Builds the `cgm` binary's argv from the plugin settings object.
-function cliArgs(cliPath, settings) {
+// Builds the `cgm` binary's argv. Callers must pass already-defaulted
+// values (e.g. Panel.qml's root.lowMmol etc., not raw settings fields) --
+// an unset setting is `undefined`, and String(undefined) is the literal
+// string "undefined", which `cgm` then fails to parse as a flag value.
+function cliArgs(cliPath, url, low, high, urgentHigh) {
     return [
         cliPath,
-        "-url", String(settings.nightscoutUrl || ""),
-        "-low", String(settings.lowMmol),
-        "-high", String(settings.highMmol),
-        "-urgent-high", String(settings.urgentHighMmol)
+        "-url", String(url || ""),
+        "-low", String(low),
+        "-high", String(high),
+        "-urgent-high", String(urgentHigh)
     ];
 }

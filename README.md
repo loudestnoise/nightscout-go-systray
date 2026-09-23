@@ -59,11 +59,30 @@ go build -o bin/cgm .
 Requires Go 1.16+ (`go version` to check; install via your distro or
 `mise use go` if you use [mise](https://mise.jdx.dev/)).
 
-Finally, open the plugin's settings from Omarchy's Setup > Plugins screen
-and set your Nightscout URL (required), low/high/urgent-high targets in
-mmol/L, whether to show mg/dL instead of mmol/L as the primary value (both
-are always shown in the popup), and refresh interval. The bar pill shows a
-loading/warning glyph until a URL is set.
+Finally, set your Nightscout URL (required). As of Omarchy 4.0.0-alpha
+there's no settings-form UI wired up for plugin schemas yet — despite the
+manifest declaring one — so this means hand-editing your bar entry in
+`~/.config/omarchy/shell.json` (which the shell watches live, so no restart
+needed). Find the `{"id": "loudestnoise.nightscout-cgm"}` entry under
+`bar.layout` and add your settings as **flat keys directly on that entry**
+(not nested under a `"settings"` key — the shell copies every non-`"id"`
+key on the entry straight into the widget's settings object, the same way
+`omarchy.clock`'s entry has `format`/`formatAlt` as plain top-level keys):
+
+```json
+{
+  "id": "loudestnoise.nightscout-cgm",
+  "nightscoutUrl": "https://your-nightscout-instance.com"
+}
+```
+
+You can add `lowMmol`, `highMmol`, `urgentHighMmol`, `showMgdl`, and
+`refreshIntervalSec` the same way (as more flat keys on the entry) to
+override their defaults (4.0, 8.0, 15.0, false, 60). Settings changes apply
+on the widget's next poll (default: within 60s); to see it immediately,
+middle-click the pill or open its popup and click Refresh. The bar pill
+shows a loading/warning glyph until a URL is
+set.
 
 ## JSON contract
 
@@ -83,14 +102,27 @@ Example:
 }
 ```
 
+## Updating the plugin
+
+After `omarchy plugin update` (or manually editing files under the plugin's
+install directory), run **`omarchy restart shell`**. On Omarchy
+4.0.0-alpha, the "Local plugin changed, reloading" file-watch that fires on
+edits does not reliably recreate a `bar-widget` that's already placed in
+the bar — it can keep running the pre-update code (and miss the update
+entirely) until the shell itself is restarted. This does *not* apply to
+settings changes in `shell.json`: those reach an already-running widget
+live, no restart needed.
+
 ## Known limitations / follow-ups
 
 - No desktop notifications for alerts yet (original used `beeep`); the
   popup lists active alerts, but nothing pushes a notification when the bar
   isn't visible.
-- QML was written against and tested against Omarchy 4.0.0 (alpha,
-  "Quattro") via `qs -p <path>` headless runs against real Nightscout-shaped
-  JSON; it has not been exercised in a live desktop session.
+- Verified on a real Omarchy 4.0.0-alpha ("Quattro") desktop install: built
+  and enabled the plugin, drove it through its actual `Bar.qml` ->
+  `BarWidget.qml` -> `Panel.qml` settings-injection path (not just headless
+  `qs -p` runs against synthetic harnesses), and confirmed a live glucose
+  reading rendering in the real bar and popup.
 
 ## Attribution
 
