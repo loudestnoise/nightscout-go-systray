@@ -41,12 +41,18 @@ BarWidget {
         onLoaded: { root.injectPanel(); Qt.callLater(root.injectPanel); }
     }
 
-    BarIconButton {
+    // WidgetButton (not BarIconButton): our text is a variable-length value
+    // pill ("🟢 141 →"), not a single icon glyph. BarIconButton fixes its
+    // width to Style.bar.statusSlot (21px, sized for one glyph) regardless
+    // of content, which let our actual rendered text overflow past its
+    // allocated slot into whatever bar widget sits next to it -- visible on
+    // a real desktop as this widget's content overlapping its neighbor.
+    // WidgetButton sizes implicitWidth from the real text label instead.
+    WidgetButton {
         id: button
         anchors.fill: parent
         bar: root.bar
         text: panelLoader.item ? panelLoader.item.pillText : "..."
-        slotSize: Style.bar.statusSlot
         tooltipText: panelLoader.item ? panelLoader.item.pillTooltip : "Nightscout CGM"
         onPressed: function (b) {
             if (b === Qt.LeftButton) root.togglePanel();
